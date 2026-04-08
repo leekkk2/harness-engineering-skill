@@ -1,0 +1,37 @@
+{
+  "$schema": "drift-rules/v1",
+  "description": "架构漂移检测规则定义。按项目需求定制 layers 和 forbidden_patterns。",
+  "layers": {
+    "controller": {
+      "can_import": ["service", "validator", "types", "config", "utils"],
+      "cannot_import": ["controller"],
+      "description": "控制层：处理 HTTP 请求/响应，调用 service"
+    },
+    "service": {
+      "can_import": ["types", "config", "utils"],
+      "cannot_import": ["controller", "route"],
+      "description": "业务层：核心业务逻辑"
+    },
+    "validator": {
+      "can_import": ["types"],
+      "cannot_import": ["controller", "service", "config"],
+      "description": "验证层：输入验证与转换"
+    }
+  },
+  "forbidden_patterns": [
+    {
+      "pattern": "TODO|FIXME|HACK",
+      "severity": "warning",
+      "message": "发现待处理标记，请确认是否需要处理"
+    }
+  ],
+  "custom_rules": [
+    {
+      "id": "no-hardcoded-secrets",
+      "pattern": "(password|secret|api_key|token)\\s*=\\s*['\"][^'\"]+['\"]",
+      "exclude": ["*.test.*", "*.spec.*", "*.example.*"],
+      "severity": "error",
+      "message": "禁止硬编码敏感信息，使用环境变量"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "$schema": "sprint-contract/v1",
+  "id": "sprint-YYYY-MM-DD-NNN",
+  "created": "YYYY-MM-DDTHH:MM:SSZ",
+  "status": "draft",
+  "objective": "一句话描述本次 Sprint 的目标",
+  "scope": {
+    "modules": [
+      "src/modules/target-module"
+    ],
+    "read_only": [
+      "src/config",
+      "src/types"
+    ],
+    "forbidden": [
+      "other-submodule/**"
+    ]
+  },
+  "success_criteria": [
+    {
+      "id": "SC-1",
+      "description": "描述期望的行为或输出",
+      "verification": "如何验证（如 curl 命令、测试命令、JSON schema 校验）",
+      "status": "pending"
+    },
+    {
+      "id": "SC-2",
+      "description": "第二个验收标准",
+      "verification": "验证方式",
+      "status": "pending"
+    }
+  ],
+  "constraints": [
+    "不修改现有 API 接口签名",
+    "使用现有中间件模式",
+    "错误处理遵循项目统一格式"
+  ],
+  "agents": {
+    "generator": {
+      "model": "claude-opus-4-6",
+      "context": ".harness/context/server.md",
+      "role": "实现功能代码"
+    },
+    "evaluator": {
+      "model": "claude-sonnet-4-6",
+      "context": ".harness/sensors/eval/criteria/",
+      "role": "评估代码质量与验收标准"
+    }
+  },
+  "timeline": {
+    "estimated_duration": "2h",
+    "max_iterations": 3
+  },
+  "notes": ""
+}

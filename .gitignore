@@ -1,0 +1,4 @@
+.DS_Store
+*.jsonl
+!templates/session-log-format.jsonl
+node_modules/

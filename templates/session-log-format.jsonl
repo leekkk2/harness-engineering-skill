@@ -1,0 +1,2 @@
+{"ts":"2026-04-08T10:00:00Z","session":"example-001","agent":"claude-opus-4-6","task":"feat:example-feature","duration_min":25,"files_changed":4,"lines_added":120,"lines_removed":15,"tests_added":8,"eval_score":0.85,"iterations":2,"status":"completed"}
+{"ts":"2026-04-08T14:00:00Z","session":"example-002","agent":"claude-sonnet-4-6","task":"fix:login-redirect","duration_min":10,"files_changed":2,"lines_added":15,"lines_removed":5,"tests_added":2,"eval_score":0.90,"iterations":1,"status":"completed"}
