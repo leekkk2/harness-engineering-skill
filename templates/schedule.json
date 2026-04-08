@@ -1,40 +1,40 @@
 {
   "$schema": "harness-schedule/v1",
-  "description": "熵管理定期任务调度配置",
+  "description": "Entropy management scheduled task configuration",
   "schedules": [
     {
       "task": "drift-detector",
       "script": ".harness/entropy/drift-detector.sh",
       "frequency": "weekly",
       "day": "monday",
-      "description": "综合架构漂移检测"
+      "description": "Comprehensive architecture drift detection"
     },
     {
       "task": "doc-consistency",
       "script": ".harness/entropy/doc-consistency.sh",
       "frequency": "on-change",
       "trigger": "docs/**",
-      "description": "文档与代码一致性检查"
+      "description": "Documentation-code consistency check"
     },
     {
       "task": "dependency-audit",
       "script": ".harness/entropy/dependency-audit.sh",
       "frequency": "weekly",
       "day": "friday",
-      "description": "依赖安全与更新审计"
+      "description": "Dependency security and update audit"
     },
     {
       "task": "dead-code-scanner",
       "script": ".harness/entropy/dead-code-scanner.sh",
       "frequency": "monthly",
       "day": 1,
-      "description": "死代码检测"
+      "description": "Dead code detection"
     },
     {
       "task": "harness-health",
       "script": ".harness/entropy/harness-health.sh",
       "frequency": "daily",
-      "description": "Harness 自身健康检查"
+      "description": "Harness self-health check"
     }
   ]
 }

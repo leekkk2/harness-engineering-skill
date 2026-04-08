@@ -1,28 +1,28 @@
 {
   "$schema": "drift-rules/v1",
-  "description": "架构漂移检测规则定义。按项目需求定制 layers 和 forbidden_patterns。",
+  "description": "Architecture drift detection rule definitions. Customize layers and forbidden_patterns per project.",
   "layers": {
     "controller": {
       "can_import": ["service", "validator", "types", "config", "utils"],
       "cannot_import": ["controller"],
-      "description": "控制层：处理 HTTP 请求/响应，调用 service"
+      "description": "Controller layer: handles HTTP requests/responses, delegates to services"
     },
     "service": {
       "can_import": ["types", "config", "utils"],
       "cannot_import": ["controller", "route"],
-      "description": "业务层：核心业务逻辑"
+      "description": "Service layer: core business logic"
     },
     "validator": {
       "can_import": ["types"],
       "cannot_import": ["controller", "service", "config"],
-      "description": "验证层：输入验证与转换"
+      "description": "Validator layer: input validation and transformation"
     }
   },
   "forbidden_patterns": [
     {
       "pattern": "TODO|FIXME|HACK",
       "severity": "warning",
-      "message": "发现待处理标记，请确认是否需要处理"
+      "message": "Pending marker found — confirm whether action is needed"
     }
   ],
   "custom_rules": [
@@ -31,7 +31,7 @@
       "pattern": "(password|secret|api_key|token)\\s*=\\s*['\"][^'\"]+['\"]",
       "exclude": ["*.test.*", "*.spec.*", "*.example.*"],
       "severity": "error",
-      "message": "禁止硬编码敏感信息，使用环境变量"
+      "message": "Hardcoded secrets are forbidden — use environment variables"
     }
   ]
 }

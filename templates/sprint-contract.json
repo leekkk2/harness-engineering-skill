@@ -3,7 +3,7 @@
   "id": "sprint-YYYY-MM-DD-NNN",
   "created": "YYYY-MM-DDTHH:MM:SSZ",
   "status": "draft",
-  "objective": "一句话描述本次 Sprint 的目标",
+  "objective": "One-line description of this Sprint's goal",
   "scope": {
     "modules": [
       "src/modules/target-module"
@@ -19,32 +19,32 @@
   "success_criteria": [
     {
       "id": "SC-1",
-      "description": "描述期望的行为或输出",
-      "verification": "如何验证（如 curl 命令、测试命令、JSON schema 校验）",
+      "description": "Describe the expected behavior or output",
+      "verification": "How to verify (e.g., curl command, test command, JSON schema validation)",
       "status": "pending"
     },
     {
       "id": "SC-2",
-      "description": "第二个验收标准",
-      "verification": "验证方式",
+      "description": "Second acceptance criterion",
+      "verification": "Verification method",
       "status": "pending"
     }
   ],
   "constraints": [
-    "不修改现有 API 接口签名",
-    "使用现有中间件模式",
-    "错误处理遵循项目统一格式"
+    "Do not modify existing API interface signatures",
+    "Use existing middleware patterns",
+    "Error handling follows project-wide conventions"
   ],
   "agents": {
     "generator": {
       "model": "claude-opus-4-6",
       "context": ".harness/context/server.md",
-      "role": "实现功能代码"
+      "role": "Implement feature code"
     },
     "evaluator": {
       "model": "claude-sonnet-4-6",
       "context": ".harness/sensors/eval/criteria/",
-      "role": "评估代码质量与验收标准"
+      "role": "Evaluate code quality and acceptance criteria"
     }
   },
   "timeline": {

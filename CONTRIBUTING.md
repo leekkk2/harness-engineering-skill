@@ -17,26 +17,25 @@ Templates should be:
 - **Self-documenting** — include usage comments at the top
 - **Executable** — shell scripts should work on macOS and Linux
 
-### Adding Examples
+### Adding References
 
-Case studies should include:
-- Project profile (anonymized if needed)
-- Before/after state
-- Key lessons learned
-- Implementation timeline
+Reference additions should include:
+- A working URL to the resource
+- A brief description of its core value
+- Categorization into the appropriate section
 
 ### Improving SKILL.md
 
 The core skill definition should remain:
 - **Self-contained** — an agent reading only SKILL.md should be able to execute
-- **Bilingual** — Chinese primary with English technical terms
 - **Incremental** — phases can be executed independently
+- **Under 500 lines** — keep it focused and scannable
 
 ## Development
 
 ```bash
 # Clone
-git clone https://github.com/<owner>/harness-engineering-skill.git
+git clone https://github.com/leekkk2/harness-engineering-skill.git
 
 # Test scaffold template
 bash templates/scaffold.sh /tmp/test-project

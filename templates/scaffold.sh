@@ -1,58 +1,58 @@
 #!/bin/bash
-# scaffold.sh — 创建 .harness/ 目录骨架
-# 用法: bash templates/scaffold.sh [project-root]
-# 默认在当前目录创建
+# scaffold.sh — Create .harness/ directory scaffold
+# Usage: bash templates/scaffold.sh [project-root]
+# Defaults to current directory if not specified
 
 set -euo pipefail
 
 PROJECT_ROOT="${1:-.}"
 
-echo ">>> 在 ${PROJECT_ROOT} 创建 .harness/ 骨架..."
+echo ">>> Creating .harness/ scaffold in ${PROJECT_ROOT}..."
 
-# Layer 0: 根目录
+# Layer 0: Root
 mkdir -p "${PROJECT_ROOT}/.harness"
 
-# Layer 1: 领域上下文
+# Layer 1: Domain context
 mkdir -p "${PROJECT_ROOT}/.harness/context"
 
-# Layer 2: 反馈传感器
+# Layer 2: Feedback sensors
 mkdir -p "${PROJECT_ROOT}/.harness/sensors/pre-commit/hooks"
 mkdir -p "${PROJECT_ROOT}/.harness/sensors/ci"
 mkdir -p "${PROJECT_ROOT}/.harness/sensors/drift"
 mkdir -p "${PROJECT_ROOT}/.harness/sensors/eval/criteria"
 
-# Layer 3: 多代理编排
+# Layer 3: Multi-agent orchestration
 mkdir -p "${PROJECT_ROOT}/.harness/agents/contracts/active"
 mkdir -p "${PROJECT_ROOT}/.harness/agents/contracts/archive"
 mkdir -p "${PROJECT_ROOT}/.harness/agents/specializations"
 mkdir -p "${PROJECT_ROOT}/.harness/agents/workflows"
 
-# Layer 4: 熵管理
+# Layer 4: Entropy management
 mkdir -p "${PROJECT_ROOT}/.harness/entropy"
 
-# Layer 5: 度量
+# Layer 5: Metrics
 mkdir -p "${PROJECT_ROOT}/.harness/metrics/templates"
 
-# 创建 VERSION 文件
+# Create VERSION file
 echo "0.1.0" > "${PROJECT_ROOT}/.harness/VERSION"
 
-# 确保 .gitignore 排除日志文件
+# Ensure .gitignore excludes log files
 if [ -f "${PROJECT_ROOT}/.gitignore" ]; then
     if ! grep -q '\.harness/metrics/.*\.jsonl' "${PROJECT_ROOT}/.gitignore" 2>/dev/null; then
         echo "" >> "${PROJECT_ROOT}/.gitignore"
-        echo "# Harness 日志文件（不入库）" >> "${PROJECT_ROOT}/.gitignore"
+        echo "# Harness log files (not committed)" >> "${PROJECT_ROOT}/.gitignore"
         echo ".harness/metrics/*.jsonl" >> "${PROJECT_ROOT}/.gitignore"
     fi
 else
     cat > "${PROJECT_ROOT}/.gitignore" << 'GITIGNORE'
-# Harness 日志文件（不入库）
+# Harness log files (not committed)
 .harness/metrics/*.jsonl
 GITIGNORE
 fi
 
-echo ">>> .harness/ 骨架创建完成"
+echo ">>> .harness/ scaffold created successfully"
 echo ""
-echo "下一步:"
-echo "  1. 复制 harness-readme.md 到 .harness/README.md 并按项目定制"
-echo "  2. 在项目 CLAUDE.md/AGENTS.md 中添加 .harness/ 引用"
-echo "  3. 开始 Phase 1: Feedback Loops"
+echo "Next steps:"
+echo "  1. Copy harness-readme.md to .harness/README.md and customize for your project"
+echo "  2. Add .harness/ references in your CLAUDE.md/AGENTS.md"
+echo "  3. Start Phase 1: Feedback Loops"

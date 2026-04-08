@@ -1,212 +1,212 @@
 ---
 name: harness-engineering
-description: Set up systematic AI Agent Harness Engineering for any project. Includes 5-layer .harness/ directory structure, pre-commit hooks, architecture drift detection, Sprint Contract multi-agent coordination, entropy management and metrics. Trigger when users mention harness engineering, agent constraints, architecture drift, AGENTS.md refactoring, multi-agent coordination, Sprint Contract, context engineering, agent quality systems, or simply want to "make AI coding more reliable". 为任意项目搭建 AI Agent Harness 工程体系。
+description: Set up systematic AI Agent Harness Engineering for any project. Creates a 5-layer .harness/ directory with pre-commit hooks, architecture drift detection, Sprint Contract multi-agent coordination, entropy management, and metrics. Use this skill PROACTIVELY whenever users mention harness engineering, agent constraints, architecture drift, AGENTS.md refactoring, multi-agent coordination, Sprint Contracts, context engineering, agent quality systems, or want to make AI-assisted coding more reliable and systematic. Also applies when setting up new projects for AI agent collaboration, improving existing agent workflows, or diagnosing why an AI agent keeps making the same mistakes.
 ---
 
 # Harness Engineering
 
-> "Agent = Model + Harness" — 除模型本身以外的一切都是 Harness。
+> "Agent = Model + Harness" — Everything except the model itself is the Harness.
 
-为任意项目搭建约束 (constrain)、告知 (inform)、验证 (verify)、纠正 (correct) AI Agent 行为的系统工程。
+Build systems that **constrain**, **inform**, **verify**, and **correct** AI agent behavior for any project.
 
-## 核心理念
+## Core Principles
 
-1. **可拆卸 (Rippable)**: 每个组件独立工作，模型改进后可安全移除
-2. **渐进式 (Incremental)**: 从失败中学习，只在遇到问题时添加配置
-3. **反馈优先 (Feedback First)**: 成功静默，失败详报
-4. **仓库即真相 (Repo as Truth)**: 所有 Harness 配置版本控制
-5. **简单优先 (Simplicity First)**: 找到最简方案，只在必要时增加复杂度
-6. **平台无关 (Agent-Agnostic)**: 核心约束与具体 Agent 平台解耦
+1. **Rippable**: Each component works independently; safely remove when models improve
+2. **Incremental**: Learn from failures; add configuration only when problems emerge
+3. **Feedback First**: Success is silent; failures are verbose
+4. **Repo as Truth**: All harness configuration is version-controlled
+5. **Simplicity First**: Find the simplest solution; add complexity only when needed
+6. **Agent-Agnostic**: Core constraints decouple from specific agent platforms
 
-## 四大支柱
+## Four Pillars
 
-| 支柱 | 职责 | 典型实现 |
-|------|------|----------|
-| Context Architecture | 渐进式信息披露 | CLAUDE.md/AGENTS.md → .harness/context/ |
-| Architectural Constraints | 约束执行与验证 | linter, type checker, 分层规则, pre-commit |
-| Entropy Management | 定期清理与漂移检测 | drift-detector, doc-consistency, dependency-audit |
-| Persistent Memory | 跨会话状态持久化 | progress.md, feature_list.json, Sprint Contract |
+| Pillar | Responsibility | Typical Implementation |
+|--------|---------------|----------------------|
+| Context Architecture | Progressive information disclosure | CLAUDE.md/AGENTS.md → .harness/context/ |
+| Architectural Constraints | Constraint enforcement & verification | Linters, type checkers, layer rules, pre-commit hooks |
+| Entropy Management | Periodic cleanup & drift detection | Drift detector, doc consistency, dependency audit |
+| Persistent Memory | Cross-session state persistence | progress.md, feature_list.json, Sprint Contracts |
 
-## 五层目录结构
+## 5-Layer Directory Structure
 
 ```
 .harness/
-├── README.md              # Harness 使用指南
-├── VERSION                # Harness 版本号
-├── context/               # Layer 1: 领域上下文（按需加载）
-│   ├── README.md          # 索引与使用说明
-│   └── <domain>.md        # 领域知识模块（server/client/data/deploy...）
-├── sensors/               # Layer 2: 反馈传感器
-│   ├── pre-commit/        # 快速检查: lint + format + type-check
+├── README.md              # Harness usage guide
+├── VERSION                # Harness version number
+├── context/               # Layer 1: Domain context (loaded on demand)
+│   ├── README.md          # Index and usage instructions
+│   └── <domain>.md        # Domain knowledge modules (server/client/data/deploy...)
+├── sensors/               # Layer 2: Feedback sensors
+│   ├── pre-commit/        # Fast checks: lint + format + type-check
 │   ├── ci/                # CI pipeline sensors
-│   ├── drift/             # 架构漂移检测
-│   └── eval/              # Agent 输出评估
-├── agents/                # Layer 3: 多代理编排
+│   ├── drift/             # Architecture drift detection
+│   └── eval/              # Agent output evaluation
+├── agents/                # Layer 3: Multi-agent orchestration
 │   ├── contracts/         # Sprint Contracts
-│   │   ├── template.json  # Sprint Contract 模板
-│   │   ├── active/        # 当前活跃合约
-│   │   └── archive/       # 已完成合约
-│   ├── specializations/   # 子代理角色定义
-│   └── workflows/         # 多代理工作流 DAG
-├── entropy/               # Layer 4: 熵管理（定期清理）
+│   │   ├── template.json  # Sprint Contract template
+│   │   ├── active/        # Currently active contracts
+│   │   └── archive/       # Completed contracts
+│   ├── specializations/   # Sub-agent role definitions
+│   └── workflows/         # Multi-agent workflow DAGs
+├── entropy/               # Layer 4: Entropy management (periodic cleanup)
 │   ├── drift-detector.sh
 │   ├── doc-consistency.sh
 │   ├── dependency-audit.sh
 │   └── schedule.json
-└── metrics/               # Layer 5: 度量与可观测
+└── metrics/               # Layer 5: Metrics & observability
     ├── session-logger.sh
     ├── session-log.jsonl
     └── weekly-report.sh
 ```
 
-## 执行清单
+## Execution Checklist
 
-按阶段渐进实施。每阶段独立交付价值，可随时停止。
+Implement progressively by phase. Each phase delivers independent value — stop anytime.
 
-### Phase 0: Foundation（10-30 分钟）
+### Phase 0: Foundation (10-30 min)
 
-- [ ] **P0.1** 评估项目现状：现有 CLAUDE.md/AGENTS.md、CI/CD、测试、pre-commit 等
-- [ ] **P0.2** 创建 `.harness/` 目录骨架（使用 `templates/scaffold.sh`）
-- [ ] **P0.3** 创建 `.harness/README.md`（使用 `templates/harness-readme.md`）
-- [ ] **P0.4** 创建 `.harness/VERSION`，初始版本 `0.1.0`
-- [ ] **P0.5** 在项目导航文件（CLAUDE.md/AGENTS.md/CODEX.md）中添加 `.harness/` 引用
-- [ ] **P0.6** 在 `.gitignore` 中排除 `*.jsonl`（日志文件不入库）
-- [ ] **验证**: `.harness/` 目录存在且有 README；现有所有 Agent 配置正常工作
+- [ ] **P0.1** Assess current state: existing CLAUDE.md/AGENTS.md, CI/CD, tests, pre-commit hooks
+- [ ] **P0.2** Create `.harness/` directory scaffold (use `templates/scaffold.sh`)
+- [ ] **P0.3** Create `.harness/README.md` (use `templates/harness-readme.md`)
+- [ ] **P0.4** Create `.harness/VERSION` with initial version `0.1.0`
+- [ ] **P0.5** Add `.harness/` references in project navigation files (CLAUDE.md/AGENTS.md/CODEX.md)
+- [ ] **P0.6** Exclude `*.jsonl` in `.gitignore` (log files should not be committed)
+- [ ] **Verify**: `.harness/` directory exists with README; all existing agent configurations work
 
-### Phase 1: Feedback Loops（核心价值，1-4 小时）
+### Phase 1: Feedback Loops (core value, 1-4 hours)
 
 #### 1A: Pre-commit Hooks
 
-- [ ] **P1.1** 安装 husky + lint-staged（参考 `templates/pre-commit-setup.sh`）
-- [ ] **P1.2** 配置 lint-staged（按子模块/目录分治）
-- [ ] **P1.3** 添加 commit-msg hook（验证 `<type>(scope): <摘要>` 格式）
-- [ ] **验证**: `git commit` 时自动运行 lint + format；不合规 commit message 被拒绝
+- [ ] **P1.1** Install husky + lint-staged (see `templates/pre-commit-setup.sh`)
+- [ ] **P1.2** Configure lint-staged (organize by submodule/directory)
+- [ ] **P1.3** Add commit-msg hook (validate `<type>(scope): <summary>` format)
+- [ ] **Verify**: `git commit` auto-runs lint + format; non-compliant commit messages are rejected
 
-#### 1B: 架构漂移检测
+#### 1B: Architecture Drift Detection
 
-- [ ] **P1.4** 定义漂移规则 `rules.json`（使用 `templates/drift-rules.json`）
-- [ ] **P1.5** 编写分层检查脚本（使用 `templates/check-layers.sh`）
-- [ ] **P1.6** 编写命名约定检查脚本（根据项目定制）
-- [ ] **P1.7** 创建 `run-all.sh` 统一入口
-- [ ] **验证**: 架构违规被报告
+- [ ] **P1.4** Define drift rules in `rules.json` (use `templates/drift-rules.json`)
+- [ ] **P1.5** Write layer check script (use `templates/check-layers.sh`)
+- [ ] **P1.6** Write naming convention check script (customize for project)
+- [ ] **P1.7** Create `run-all.sh` unified entry point
+- [ ] **Verify**: Architecture violations are reported
 
-#### 1C: CI 增强
+#### 1C: CI Enhancement
 
-- [ ] **P1.8** 在 CI 中添加 lint stage
-- [ ] **P1.9** 在 CI 中添加架构漂移检测（初期 `allow_failure: true`）
-- [ ] **验证**: CI pipeline 包含 lint + drift 检测阶段
+- [ ] **P1.8** Add lint stage to CI
+- [ ] **P1.9** Add architecture drift detection to CI (initially `allow_failure: true`)
+- [ ] **Verify**: CI pipeline includes lint + drift detection stages
 
-### Phase 2: Context Refactor（2-4 小时）
+### Phase 2: Context Refactor (2-4 hours)
 
-- [ ] **P2.1** 分析当前 AGENTS.md/CLAUDE.md 内容，识别领域模块
-- [ ] **P2.2** 将领域知识拆分到 `.harness/context/<domain>.md`
-- [ ] **P2.3** 精简导航文件（CLAUDE.md ≤ 50 行，AGENTS.md ≤ 80 行）
-- [ ] **P2.4** 添加 `.harness/context/README.md` 索引
-- [ ] **P2.5** 更新现有 Skills/Agents 中的引用路径
-- [ ] **验证**: 导航文件简洁；领域知识可按需获取；现有工作流不中断
+- [ ] **P2.1** Analyze current AGENTS.md/CLAUDE.md content, identify domain modules
+- [ ] **P2.2** Split domain knowledge into `.harness/context/<domain>.md`
+- [ ] **P2.3** Slim down navigation files (CLAUDE.md ≤ 50 lines, AGENTS.md ≤ 80 lines)
+- [ ] **P2.4** Add `.harness/context/README.md` index
+- [ ] **P2.5** Update reference paths in existing Skills/Agents
+- [ ] **Verify**: Navigation files are concise; domain knowledge is accessible on demand; existing workflows unbroken
 
-### Phase 3: Agent Orchestration（1-2 天）
+### Phase 3: Agent Orchestration (1-2 days)
 
-- [ ] **P3.1** 创建 Sprint Contract 模板（使用 `templates/sprint-contract.json`）
-- [ ] **P3.2** 创建 `active/` 和 `archive/` 目录
-- [ ] **P3.3** 用一个实际任务验证 Contract 流程
-- [ ] **P3.4** 定义多代理工作流 DAG（feature-development、bug-fix）
-- [ ] **P3.5**（可选）创建专项子代理：harness-evaluator、entropy-cleaner
-- [ ] **验证**: 能通过 Sprint Contract 定义、执行、评估一个完整功能
+- [ ] **P3.1** Create Sprint Contract template (use `templates/sprint-contract.json`)
+- [ ] **P3.2** Create `active/` and `archive/` directories
+- [ ] **P3.3** Validate the Contract workflow with a real task
+- [ ] **P3.4** Define multi-agent workflow DAGs (feature-development, bug-fix)
+- [ ] **P3.5** (Optional) Create specialized sub-agents: harness-evaluator, entropy-cleaner
+- [ ] **Verify**: Can define, execute, and evaluate a complete feature through Sprint Contract
 
-### Phase 4: Entropy & Metrics（1 天）
+### Phase 4: Entropy & Metrics (1 day)
 
-- [ ] **P4.1** 编写 drift-detector.sh（综合架构漂移检测）
-- [ ] **P4.2** 编写 doc-consistency.sh（文档与代码一致性检查）
-- [ ] **P4.3** 编写 dependency-audit.sh（依赖审计）
-- [ ] **P4.4** 创建 schedule.json（调度配置）
-- [ ] **P4.5** 编写 session-logger.sh（会话日志记录）
-- [ ] **P4.6** 编写 weekly-report.sh（周报生成）
-- [ ] **验证**: 所有脚本可独立运行；会话日志可追加；周报可自动生成
+- [ ] **P4.1** Write drift-detector.sh (comprehensive architecture drift detection)
+- [ ] **P4.2** Write doc-consistency.sh (documentation-code consistency check)
+- [ ] **P4.3** Write dependency-audit.sh (dependency audit)
+- [ ] **P4.4** Create schedule.json (scheduling configuration)
+- [ ] **P4.5** Write session-logger.sh (session logging)
+- [ ] **P4.6** Write weekly-report.sh (weekly report generation)
+- [ ] **Verify**: All scripts run independently; session logs append correctly; weekly reports generate
 
-### Phase 5: Continuous Evolution（持续）
+### Phase 5: Continuous Evolution (ongoing)
 
-- [ ] **P5.1** 每次 Agent 犯错 → 更新对应 Guide 或 Sensor
-- [ ] **P5.2** 每周回顾 drift 报告，调整规则严格度
-- [ ] **P5.3** 每月审查 Harness 组件，移除不再需要的复杂度
-- [ ] **P5.4** 模型升级时，重新评估各 Harness 组件是否仍然必要
+- [ ] **P5.1** Every time an agent makes an error → update the corresponding Guide or Sensor
+- [ ] **P5.2** Weekly review of drift reports, adjust rule strictness
+- [ ] **P5.3** Monthly audit of harness components, remove unnecessary complexity
+- [ ] **P5.4** When models upgrade, re-evaluate whether each harness component is still necessary
 
-## 上下文架构设计指南
+## Context Architecture Design Guide
 
-### 三层上下文系统
+### Three-Tier Context System
 
-| 层级 | 内容 | 加载方式 |
-|------|------|----------|
-| Tier 1: Hot Memory | CLAUDE.md/AGENTS.md — 项目概览、导航、核心约束 | 自动加载 |
-| Tier 2: Domain Expert | .harness/context/ — 按需加载的领域知识 | 按需加载 |
-| Tier 3: Cold Memory | 研究文档、规格说明、历史存档 | 检索触发 |
+| Tier | Content | Loading Strategy |
+|------|---------|-----------------|
+| Tier 1: Hot Memory | CLAUDE.md/AGENTS.md — project overview, navigation, core constraints | Auto-loaded |
+| Tier 2: Domain Expert | .harness/context/ — on-demand domain knowledge | Loaded on demand |
+| Tier 3: Cold Memory | Research docs, specifications, historical archives | Retrieval-triggered |
 
-### 导航文件设计原则
+### Navigation File Design Principles
 
-- CLAUDE.md 回答 "where do I look?"，不是 "what do I know?"
-- 保持简洁（理想 <60 行）— 它是导航文档，不是知识库
-- 渐进式披露 (Progressive Disclosure) 防止上下文污染
-- 上下文窗口利用率保持在 40-60%
+- CLAUDE.md answers "where do I look?", not "what do I know?"
+- Keep it concise (ideal < 60 lines) — it's a navigation document, not a knowledge base
+- Progressive Disclosure prevents context pollution
+- Context window utilization should stay at 40-60%
 
-### 领域模块结构
+### Domain Module Structure
 
-每个 `.harness/context/<domain>.md` 使用以下结构：
+Each `.harness/context/<domain>.md` follows this structure:
 
 ```markdown
 ---
 domain: <domain-name>
 updated: <date>
-triggers: ["关键词1", "关键词2", ...]
+triggers: ["keyword1", "keyword2", ...]
 ---
 
-# <领域名称>开发上下文
+# <Domain> Development Context
 
-## 架构约束
-（该领域的硬性规则）
+## Architectural Constraints
+(Hard rules for this domain)
 
-## 关键模式
-（常用代码模式与约定）
+## Key Patterns
+(Common code patterns and conventions)
 
-## 常见陷阱
-（Agent 容易犯的错误与纠正方式）
+## Common Pitfalls
+(Mistakes agents frequently make and how to correct them)
 ```
 
-## 控制系统分类
+## Control System Taxonomy
 
-### 前馈控制 (Guides)
-- 在执行前预见 Agent 行为
-- 例: 架构文档、编码指南、Skills、引导脚本
+### Feedforward Controls (Guides)
+- Anticipate agent behavior before execution
+- Examples: architecture docs, coding guidelines, Skills, scaffolding scripts
 
-### 反馈控制 (Sensors)
-- 观察执行后结果
-- 例: linter、测试、类型检查、架构漂移检测
+### Feedback Controls (Sensors)
+- Observe results after execution
+- Examples: linters, tests, type checkers, architecture drift detection
 
-### 两种验证类型
+### Two Verification Types
 
-| 类型 | 方式 | 速度 | 可靠性 | 成本 |
-|------|------|------|--------|------|
-| 计算型 (Computational) | 测试、Linter、类型检查 | 毫秒-秒 | 确定性 | 最小 |
-| 推理型 (Inferential) | AI 审查、语义判断 | 秒-分钟 | 非确定性 | 显著 |
+| Type | Method | Speed | Reliability | Cost |
+|------|--------|-------|-------------|------|
+| Computational | Tests, linters, type checkers | ms-seconds | Deterministic | Minimal |
+| Inferential | AI review, semantic judgment | seconds-minutes | Non-deterministic | Significant |
 
-**优先使用计算型控制**——它快速、可靠、低成本。推理型仅在计算型无法覆盖时使用。
+**Prefer computational controls** — they are fast, reliable, and low-cost. Use inferential controls only when computational ones cannot cover the need.
 
-## Sprint Contract 机制
+## Sprint Contract Mechanism
 
-Sprint Contract 是多代理协调的核心机制。在实现前，各参与 Agent 协商合约：
+Sprint Contracts are the core mechanism for multi-agent coordination. Before implementation, participating agents negotiate a contract:
 
 ```json
 {
   "id": "sprint-<date>-<seq>",
-  "objective": "一句话描述目标",
+  "objective": "One-line description of the goal",
   "scope": {
-    "modules": ["允许修改的路径"],
-    "read_only": ["只读路径"],
-    "forbidden": ["禁止接触的路径"]
+    "modules": ["paths allowed to modify"],
+    "read_only": ["read-only paths"],
+    "forbidden": ["paths that must not be touched"]
   },
   "success_criteria": [
     { "id": "SC-1", "description": "...", "verification": "..." }
   ],
-  "constraints": ["约束1", "约束2"],
+  "constraints": ["constraint 1", "constraint 2"],
   "agents": {
     "generator": { "model": "...", "context": "..." },
     "evaluator": { "model": "...", "context": "..." }
@@ -214,59 +214,59 @@ Sprint Contract 是多代理协调的核心机制。在实现前，各参与 Age
 }
 ```
 
-完整模板见 `templates/sprint-contract.json`。
+Full template available at `templates/sprint-contract.json`.
 
-## 关键指标
+## Key Metrics
 
-| 指标 | 说明 | 目标 |
-|------|------|------|
-| Agent PR 吞吐量 | PR/day/engineer | ≥ 2.0 |
-| 首次通过率 | Agent 产出无需人工修正的比例 | ≥ 60% |
-| 迭代次数 | 平均几轮达到验收标准 | ≤ 3 |
-| 上下文效率 | 有效上下文占比 | ≥ 50% |
-| 漂移指数 | 架构违规数趋势 | 持续下降 |
+| Metric | Description | Target |
+|--------|-------------|--------|
+| Agent PR Throughput | PRs/day/engineer | ≥ 2.0 |
+| First-Pass Rate | Proportion of agent output needing no human correction | ≥ 60% |
+| Iteration Count | Average rounds to reach acceptance criteria | ≤ 3 |
+| Context Efficiency | Effective context utilization ratio | ≥ 50% |
+| Drift Index | Architecture violation count trend | Continuously declining |
 
-## 实施层级参考
+## Implementation Level Reference
 
-| 层级 | 范围 | 内容 | 投入 |
-|------|------|------|------|
-| Level 1 | 个人 | CLAUDE.md + pre-commit hooks + 测试 | 1-2 小时 |
-| Level 2 | 团队 | + AGENTS.md + CI 约束 + 共享模板 | 1-2 天 |
-| Level 3 | 组织 | + 自定义中间件 + 可观测性 + Harness 版本管理 | 1-2 周 |
+| Level | Scope | Content | Investment |
+|-------|-------|---------|------------|
+| Level 1 | Individual | CLAUDE.md + pre-commit hooks + tests | 1-2 hours |
+| Level 2 | Team | + AGENTS.md + CI constraints + shared templates | 1-2 days |
+| Level 3 | Organization | + custom middleware + observability + harness versioning | 1-2 weeks |
 
-## 反模式
+## Anti-Patterns
 
-- 在遇到真实失败前预设计理想配置
-- 安装"以防万一"的工具
-- 将 Harness 视为静态不变
-- 模糊的文档
-- 将关键知识存储在仓库外
-- 过度工程化控制流
+- Pre-designing ideal configuration before encountering real failures
+- Installing tools "just in case"
+- Treating the harness as static and unchanging
+- Vague documentation that doesn't constrain behavior
+- Storing critical knowledge outside the repository
+- Over-engineering control flows
 
-## 模板文件
+## Template Files
 
-| 文件 | 用途 | 何时使用 |
-|------|------|---------|
-| `templates/scaffold.sh` | 创建 .harness/ 目录骨架 | Phase 0 |
-| `templates/harness-readme.md` | .harness/README.md 模板 | Phase 0 |
-| `templates/drift-rules.json` | 架构漂移规则定义 | Phase 1B |
-| `templates/check-layers.sh` | 模块分层检查脚本 | Phase 1B |
-| `templates/pre-commit-setup.sh` | husky + lint-staged 安装脚本 | Phase 1A |
-| `templates/sprint-contract.json` | Sprint Contract 模板 | Phase 3 |
-| `templates/session-log-format.jsonl` | 会话日志格式示例 | Phase 4 |
-| `templates/schedule.json` | 熵管理调度配置 | Phase 4 |
+| File | Purpose | When to Use |
+|------|---------|-------------|
+| `templates/scaffold.sh` | Create .harness/ directory scaffold | Phase 0 |
+| `templates/harness-readme.md` | .harness/README.md template | Phase 0 |
+| `templates/drift-rules.json` | Architecture drift rule definitions | Phase 1B |
+| `templates/check-layers.sh` | Module layer check script | Phase 1B |
+| `templates/pre-commit-setup.sh` | husky + lint-staged installer | Phase 1A |
+| `templates/sprint-contract.json` | Sprint Contract template | Phase 3 |
+| `templates/session-log-format.jsonl` | Session log format example | Phase 4 |
+| `templates/schedule.json` | Entropy management schedule | Phase 4 |
 
-## 参考文献
+## References
 
-详见 `references/sources.md`。核心来源：
+See `references/sources.md` for the full list. Core sources:
 
 - [OpenAI: Harness Engineering](https://openai.com/index/harness-engineering/)
 - [Anthropic: Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)
 - [Fowler/Thoughtworks: Harness Engineering](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)
 - [HumanLayer: Skill Issue](https://www.humanlayer.dev/blog/skill-issue-harness-engineering-for-coding-agents)
 
-## 不适用场景
+## When NOT to Use
 
-- 单次脚本或一次性任务——不需要 Harness
-- 纯人工开发项目——Harness 专为 AI Agent 协作设计
-- 模型选择与 prompt engineering——Harness 工程关注模型以外的一切
+- One-off scripts or throwaway tasks — no harness needed
+- Purely human-driven projects — harness engineering is designed for AI agent collaboration
+- Model selection & prompt engineering — harness engineering covers everything *except* the model

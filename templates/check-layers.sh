@@ -1,34 +1,33 @@
 #!/bin/bash
-# check-layers.sh — 检查模块分层是否违规
-# 用法: bash check-layers.sh <src-dir> [rules.json]
+# check-layers.sh — Check module layer violations
+# Usage: bash check-layers.sh <src-dir> [rules.json]
 #
-# 基于 rules.json 中定义的分层规则，扫描 import/require 语句，
-# 检测是否存在跨层违规引用。
+# Scans import/require statements based on layer rules defined in rules.json,
+# detecting cross-layer violation references.
 
 set -euo pipefail
 
-SRC_DIR="${1:?用法: check-layers.sh <src-dir> [rules.json]}"
+SRC_DIR="${1:?Usage: check-layers.sh <src-dir> [rules.json]}"
 RULES_FILE="${2:-.harness/sensors/drift/rules.json}"
 
 if [ ! -d "$SRC_DIR" ]; then
-    echo "错误: 源目录不存在: $SRC_DIR"
+    echo "Error: source directory does not exist: $SRC_DIR"
     exit 1
 fi
 
 if [ ! -f "$RULES_FILE" ]; then
-    echo "警告: 规则文件不存在: $RULES_FILE，跳过分层检查"
+    echo "Warning: rules file not found: $RULES_FILE, skipping layer check"
     exit 0
 fi
 
 VIOLATIONS=0
 
-echo "=== 架构分层检查 ==="
-echo "源目录: $SRC_DIR"
-echo "规则文件: $RULES_FILE"
+echo "=== Architecture Layer Check ==="
+echo "Source directory: $SRC_DIR"
+echo "Rules file: $RULES_FILE"
 echo ""
 
-# 提取 layers 配置中的 cannot_import 规则
-# 使用 python3 解析 JSON（跨平台兼容）
+# Extract layer configurations and check violations using python3 (cross-platform)
 python3 -c "
 import json, os, re, sys
 
@@ -43,7 +42,7 @@ for layer_name, layer_config in layers.items():
     if not cannot_import:
         continue
 
-    # 查找属于该层的文件
+    # Find files belonging to this layer
     for root, dirs, files in os.walk('$SRC_DIR'):
         for fname in files:
             if not fname.endswith(('.ts', '.tsx', '.js', '.jsx')):
@@ -52,7 +51,7 @@ for layer_name, layer_config in layers.items():
             filepath = os.path.join(root, fname)
             rel_path = os.path.relpath(filepath, '$SRC_DIR')
 
-            # 判断文件是否属于当前检查的层
+            # Determine if file belongs to the current layer
             if '/' + layer_name + '/' not in '/' + rel_path and \
                not rel_path.startswith(layer_name + '/') and \
                layer_name + '.' not in fname:
@@ -61,11 +60,11 @@ for layer_name, layer_config in layers.items():
             with open(filepath, 'r', errors='ignore') as fh:
                 for line_num, line in enumerate(fh, 1):
                     for forbidden in cannot_import:
-                        # 检查 import/require 语句中是否引用了禁止的层
+                        # Check if import/require references a forbidden layer
                         pattern = r\"(import\s.*from\s+['\"].*\" + forbidden + r\".*['\"]|require\s*\(['\"].*\" + forbidden + r\".*['\"]\))\"
                         if re.search(pattern, line):
-                            print(f'  违规: {rel_path}:{line_num}')
-                            print(f'    {layer_name} 层不应引用 {forbidden} 层')
+                            print(f'  Violation: {rel_path}:{line_num}')
+                            print(f'    {layer_name} layer must not import from {forbidden} layer')
                             print(f'    {line.strip()}')
                             print()
                             violations += 1
@@ -76,9 +75,9 @@ sys.exit(1 if violations > 0 else 0)
 EXIT_CODE=$?
 
 if [ $EXIT_CODE -eq 0 ]; then
-    echo "通过: 未发现分层违规"
+    echo "Passed: no layer violations found"
 else
-    echo "失败: 发现分层违规，请修复后重新检查"
+    echo "Failed: layer violations detected, please fix and re-check"
 fi
 
 exit $EXIT_CODE
