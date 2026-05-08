@@ -2,3 +2,14 @@
 *.jsonl
 !templates/session-log-format.jsonl
 node_modules/
+
+# Playwright & MCP Agent Artifacts
+.playwright-mcp/
+*-snap*.md
+*-step*.png
+console-*.log
+page-*.yml
+*-b64.json
+*-screenshot.png
+iarc-step*.png
+target-audience-step*.png
